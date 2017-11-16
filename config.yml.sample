@@ -1,0 +1,5 @@
+Repos:
+  - display_name: repo_name(display only)
+    name: repo_short_name
+    url: repo_name(owner/name)
+    chatwork_box: box_id
