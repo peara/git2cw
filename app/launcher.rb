@@ -3,6 +3,7 @@ require 'config'
 require 'dotenv/load'
 require 'octokit'
 require 'chatwork'
+require_relative 'message_generator'
 
 class Launcher
   attr_accessor :git_client, :chatwork_client
@@ -31,7 +32,7 @@ Settings.Repos.each do |repo|
 
   notis.each do |noti|
     event = launcher.git_client.get(noti.subject.latest_comment_url)
-    message = MessageGenerator.gen noti, event
+    message = MessageGenerator.gen repo, noti, event
     ChatWork::Message.create(room_id: repo.chatwork_box, body: message)
   end
 
