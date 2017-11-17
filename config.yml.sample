@@ -1,5 +1,6 @@
 Repos:
-  - display_name: repo_name(display only)
+  - display_name: repo_name (display only)
     name: repo_short_name
-    url: repo_name(owner/name)
+    url: repo_name (owner/name)
     chatwork_box: box_id
+    auto_read: true (auto mark as read)

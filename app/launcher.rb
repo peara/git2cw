@@ -27,7 +27,7 @@ loop do
   Settings.Repos.each do |repo|
     notis = launcher.git_client.repository_notifications(repo.url)
     # TODO: mark notification read
-    # launcher.git_client.mark_repo_notifications_as_read(repo.url)
+    #
     next if notis.empty?
 
     puts "New Notification in #{repo.display_name}"
@@ -37,6 +37,8 @@ loop do
       message = MessageGenerator.gen noti, event
       ChatWork::Message.create(room_id: repo.chatwork_box, body: message)
     end
+
+    launcher.git_client.mark_repo_notifications_as_read(repo.url) if repo.auto_read
   end
   sleep 300
 end
