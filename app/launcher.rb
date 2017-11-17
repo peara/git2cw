@@ -32,6 +32,7 @@ Settings.Repos.each do |repo|
 
   notis.each do |noti|
     event = launcher.git_client.get(noti.subject.latest_comment_url)
+    next unless noti.subject.type == "PullRequest"
     message = MessageGenerator.gen repo, noti, event
     ChatWork::Message.create(room_id: repo.chatwork_box, body: message)
   end
