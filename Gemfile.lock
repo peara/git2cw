@@ -54,6 +54,8 @@ GEM
     octokit (4.7.0)
       sawyer (~> 0.8.0, >= 0.5.3)
     public_suffix (3.0.1)
+    rake (12.3.0)
+    redis (4.0.1)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
@@ -69,6 +71,8 @@ DEPENDENCIES
   config (~> 1.4)
   dotenv (~> 2.2, >= 2.2.1)
   octokit (~> 4.0)
+  rake
+  redis
 
 RUBY VERSION
    ruby 2.3.1p112

@@ -3,7 +3,9 @@ require 'config'
 require 'dotenv/load'
 require 'octokit'
 require 'chatwork'
+require 'redis'
 require_relative 'message_generator'
+
 
 class Launcher
   attr_accessor :git_client, :chatwork_client
@@ -19,14 +21,9 @@ class Launcher
     puts "Load Chatwork"
     ChatWork.api_key = ENV["CHATWORK_API_KEY"]
 
-    puts "Load Stored File"
-    if File.file?('data.txt')
-      File.open('data.txt', 'r') do |file|
-        @last_event_id = file.gets.to_i
-      end
-    else
-      @last_event_id = 0
-    end
+    puts "Load Redis"
+    @redis = Redis.new(url: ENV["REDIS_URL"])
+    @last_event_id = @redis.get('last_event_id')&.to_i || 0
 
     puts "Loading... done!\n\n"
   end
@@ -72,10 +69,8 @@ class Launcher
   end
 
   def shutdown
-    puts "Shutting down..."
-    File.open('data.txt', 'w') do |file|
-      file.puts @max_event_id
-    end
+    puts "Update Redis..."
+    @redis.set("last_event_id", @max_event_id.to_s)
     puts "Done!"
   end
 end
