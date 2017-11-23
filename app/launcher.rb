@@ -60,7 +60,7 @@ class Launcher
       events.each do |event|
         break if event.id.to_i <= @last_event_id
         message = MessageGenerator.event2message event
-        ChatWork::Message.create(room_id: repo.chatwork_box, body: message) if message.present?
+        ChatWork::Message.create(room_id: repo.chatwork_box, body: message) unless message.nil?
 
         if @last_event_id == 0
           @last_event_id = event.id.to_i
