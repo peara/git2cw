@@ -4,7 +4,6 @@ require 'dotenv/load'
 require 'octokit'
 require 'chatwork'
 require_relative 'message_generator'
-require 'pry'
 
 class Launcher
   attr_accessor :git_client, :chatwork_client
