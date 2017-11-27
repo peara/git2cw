@@ -5,5 +5,5 @@ task :build do
 end
 
 task :start do
-  ruby "app/launcher.rb"
+  ruby "app/main.rb"
 end

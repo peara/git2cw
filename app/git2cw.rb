@@ -7,7 +7,7 @@ require 'redis'
 require_relative 'message_generator'
 require 'pry'
 
-class Launcher
+class Git2CW
   attr_accessor :git_client, :chatwork_client
   def initialize
     puts "Launching..."
@@ -74,7 +74,3 @@ class Launcher
     puts "Done!"
   end
 end
-
-launcher = Launcher.new
-launcher.check_new_event
-launcher.shutdown
