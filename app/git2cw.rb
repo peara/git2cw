@@ -54,17 +54,14 @@ class Git2CW
       puts "\tRepo: #{repo.display_name}"
       events = @git_client.repository_events(repo.url)
 
-      events.each do |event|
-        break if event.id.to_i <= @last_event_id
+      @max_event_id = events[0].id.to_i if events[0].id.to_i > @max_event_id
+      next if @last_event_id == 0
+
+      events.reverse_each do |event|
+        next if event.id.to_i <= @last_event_id
         message = MessageGenerator.event2message event
         ChatWork::Message.create(room_id: repo.chatwork_box, body: message) unless message.nil?
-
-        if @last_event_id == 0
-          @last_event_id = event.id.to_i
-        end
       end
-
-      @max_event_id = events[0].id.to_i if events[0].id.to_i > @max_event_id
     end
   end
 
