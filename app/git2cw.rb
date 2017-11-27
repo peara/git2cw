@@ -68,6 +68,7 @@ class Git2CW
   def shutdown
     puts "Update Redis..."
     @redis.set("last_event_id", @max_event_id.to_s)
+    puts "Last event: #{@max_event_id}"
     puts "Done!"
   end
 end
