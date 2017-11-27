@@ -49,8 +49,8 @@ class MessageGenerator
 
     message = <<~MSG
       [info][title][Github] #{repo.name}  #{action}[/title]
-      Title: #{title}
-      Url: #{url}
+      ■ #{title}
+      #{url}
       Body: #{body}
       [/info]
     MSG
