@@ -4,3 +4,7 @@ Repos:
     url: repo_name (owner/name)
     chatwork_box: box_id
     auto_read: true (auto mark as read)
+    track_event:
+      - comment
+      - pullrequest
+      - issue

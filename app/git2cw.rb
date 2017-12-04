@@ -17,6 +17,7 @@ class Git2CW
 
     puts "Load Repo Configs"
     Config.load_and_set_settings("config.yml")
+    @message_generator = MessageGenerator.new()
 
     puts "Load Chatwork"
     ChatWork.api_key = ENV["CHATWORK_API_KEY"]
@@ -39,7 +40,7 @@ class Git2CW
       notis.each do |noti|
         event = launcher.git_client.get(noti.subject.latest_comment_url)
         next unless noti.subject.type == "PullRequest"
-        message = MessageGenerator.noti2message repo, noti, event
+        message = @message_generator.noti2message repo, noti, event
         ChatWork::Message.create(room_id: repo.chatwork_box, body: message)
       end
 
@@ -57,9 +58,10 @@ class Git2CW
       @max_event_id = events[0].id.to_i if events[0].id.to_i > @max_event_id
       next if @last_event_id == 0
 
+      # github return newest event first
       events.reverse_each do |event|
         next if event.id.to_i <= @last_event_id
-        message = MessageGenerator.event2message event
+        message = @message_generator.event2message event, repo
         ChatWork::Message.create(room_id: repo.chatwork_box, body: message) unless message.nil?
       end
     end

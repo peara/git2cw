@@ -1,5 +1,5 @@
 class MessageGenerator
-  def self.noti2message repo, noti, event
+  def noti2message repo, noti, event
     description = event.body
 
     message = <<~MSG
@@ -14,7 +14,7 @@ class MessageGenerator
     message
   end
 
-  def self.event2message event
+  def event2message event, settings
     repo = event.repo
     title = ''
     url = ''
@@ -22,30 +22,43 @@ class MessageGenerator
     body = ''
     action = ''
 
+    track_events = settings.track_events || []
+
     case event.type
     when 'PullRequestEvent'
+      return nil unless track_events.include? 'pullrequest'
+
       title = "#{event.actor.login} #{event.payload.action} pull request #{event.payload.pull_request.number}"
       url = event.payload.pull_request.html_url
       body = event.payload.pull_request.title
       action = '(merged)' unless event.payload.pull_request.merged_at.nil?
+
     when 'IssuesEvent'
+      return nil unless track_events.include? 'issue'
+
       title = "#{event.actor.login} #{event.payload.action} issue #{event.payload.issue.number}"
       url = event.payload.issue.html_url
       body = event.payload.issue.title
+
     when 'IssueCommentEvent'
+      return nil unless track_events.include? 'comment'
+
       title = "#{event.actor.login} #{event.payload.action} comment in issue #{event.payload.issue.number}"
       url = event.payload.comment.html_url
       body = "[code]\n#{event.payload.comment.body}\n[/code]"
       action = '(commented)'
+
     when 'PullRequestReviewCommentEvent'
+      return nil unless track_events.include? 'comment'
+
       title = "#{event.actor.login} #{event.payload.action} comment in pull request #{event.payload.pull_request.number}"
       url = event.payload.comment.html_url
       body = "[code]\n#{event.payload.comment.body}\n[/code]"
       action = '(commented)'
+
     else
       return nil
     end
-
 
     message = <<~MSG
       [info][title][Github] #{repo.name}  #{action}[/title]
